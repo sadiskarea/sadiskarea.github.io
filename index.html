@@ -4,34 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>百度网盘搜索</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>音乐搜索</title>
 </head>
 <body>
-    <h1>百度网盘搜索</h1>
-    <input type="text" id="keyword" placeholder="输入搜索关键词">
-    <button id="search">搜索</button>
-    <ul id="results"></ul>
-    <script>
-        const API_KEY = 'AIzaSyBUNJjRddEt9G3FxcF1yfkV9_bBftnBZAc'; // 替换为您的API密钥
-        const SEARCH_ENGINE_ID = 'c0c4066f3c4e74b3e'; // 替换为您的搜索引擎ID
-
-        function search_baidu_pan_links(keyword) {
-            const search_url = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${SEARCH_ENGINE_ID}&q=${encodeURIComponent(keyword)}+site:pan.baidu.com/s/`;
-            $.getJSON(search_url, function(data) {
-                const items = data.items || [];
-                const results = items
-                    .filter(item => item.link.includes('www.pan.baidu.com/s/'))
-                    .map(item => `<li>${item.title}: <a href="${item.link}" target="_blank">${item.link}</a></li>`)
-                    .join('');
-                $("#results").html(results);
-            });
-        }
-
-        $("#search").click(function() {
-            const keyword = $("#keyword").val();
-            search_baidu_pan_links(keyword);
-        });
-    </script>
+    <h1>音乐搜索</h1>
+    <form action="https://www.google.com/search" method="get">
+        <input type="text" name="q" placeholder="输入搜索关键词" />
+        <input type="hidden" name="tbm" value="isch" />
+        <button type="submit">搜索音乐</button>
+    </form>
 </body>
 </html>
