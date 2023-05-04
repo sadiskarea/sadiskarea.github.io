@@ -7,15 +7,16 @@ API_KEY = 'AIzaSyBUNJjRddEt9G3FxcF1yfkV9_bBftnBZAc'  # 替换为您的API密钥
 SEARCH_ENGINE_ID = 'c0c4066f3c4e74b3e'  # 替换为您的搜索引擎ID
 
 def search_baidu_pan_links(keyword):
-    search_url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={SEARCH_ENGINE_ID}&q={keyword} site:pan.baidu.com/s/"
+    search_url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={SEARCH_ENGINE_ID}&q={keyword}"
     response = requests.get(search_url)
     search_results = response.json()
 
     links = []
     for result in search_results['items']:
         url = result['link']
-        title = result['title']
-        links.append({'title': title, 'url': url})
+        if "www.pan.baidu.com/s/" in url:
+            title = result['title']
+            links.append({'title': title, 'url': url})
 
     return links
 
