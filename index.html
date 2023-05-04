@@ -1,58 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>音乐搜索与试听</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        input {
-            font-size: 1rem;
-            padding: 5px;
-            width: 300px;
-            max-width: 100%;
-        }
-
-        button {
-            font-size: 1rem;
-            padding: 5px 10px;
-            cursor: pointer;
-            border: none;
-            background-color: #4b79f0;
-            color: white;
-            border-radius: 3px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音乐搜索与试听</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #333;
+      padding: 1rem;
+      text-align: center;
+      color: white;
+    }
+    main {
+      padding: 1rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    button {
+      width: 100%;
+      padding: 0.5rem;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #555;
+    }
+    .song-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .song-card {
+      background-color: white;
+      width: 100%;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    }
+    .song-card:hover {
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+    .song-title {
+      margin: 0;
+      font-weight: bold;
+    }
+    .song-artist {
+      margin: 0;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
+  <header>
     <h1>音乐搜索与试听</h1>
-    <form action="https://www.google.com/search" method="get" target="_blank">
-        <input type="text" name="q" placeholder="输入歌曲名称" />
-        <input type="hidden" name="tbm" value="vid">
-        <button type="submit">搜索</button>
-    </form>
-</body>
-</html>
+  </header>
+  <main>
+    <input type="text" id="search-input" placeholder="搜索音乐...">
+    <button id="search-button">搜索</button>
+    <div class="song-container" id="song-container"></div>
+  </main>
+  <script>
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('search-input');
+    const songContainer = document.getElementById('song-container');
+
+    searchButton.addEventListener('click', () => {
+      const query = searchInput.value.trim();
+      if (query) {
+        searchSongs(query);
+      }
+    });
+
+    async function searchSongs(query) {
+      const response = await fetch(`https://api.deezer.com/search?q=${query
