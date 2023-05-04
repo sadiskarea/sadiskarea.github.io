@@ -1,47 +1,37 @@
-import re
-import requests
-import random
-import string
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百度网盘搜索</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>百度网盘搜索</h1>
+    <input type="text" id="keyword" placeholder="输入搜索关键词">
+    <button id="search">搜索</button>
+    <ul id="results"></ul>
+    <script>
+        const API_KEY = 'AIzaSyBUNJjRddEt9G3FxcF1yfkV9_bBftnBZAc'; // 替换为您的API密钥
+        const SEARCH_ENGINE_ID = 'c0c4066f3c4e74b3e'; // 替换为您的搜索引擎ID
 
-API_KEY = 'AIzaSyBUNJjRddEt9G3FxcF1yfkV9_bBftnBZAc'  # 替换为您的API密钥
-SEARCH_ENGINE_ID = 'c0c4066f3c4e74b3e'  # 替换为您的搜索引擎ID
+        function search_baidu_pan_links(keyword) {
+            const search_url = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${SEARCH_ENGINE_ID}&q=${keyword}`;
+            $.getJSON(search_url, function(data) {
+                const items = data.items || [];
+                const results = items
+                    .filter(item => item.link.includes('www.pan.baidu.com/s/'))
+                    .map(item => `<li>${item.title}: <a href="${item.link}" target="_blank">${item.link}</a></li>`)
+                    .join('');
+                $("#results").html(results);
+            });
+        }
 
-def search_baidu_pan_links(keyword):
-    search_url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={SEARCH_ENGINE_ID}&q={keyword}"
-    response = requests.get(search_url)
-    search_results = response.json()
-
-    links = []
-    for result in search_results['items']:
-        url = result['link']
-        if "www.pan.baidu.com/s/" in url:
-            title = result['title']
-            links.append({'title': title, 'url': url})
-
-    return links
-
-def find_extraction_code(url):
-    response = requests.get(url)
-    content = response.text
-    extraction_code_pattern = re.compile(r'[a-zA-Z0-9]{4}')
-    extraction_code = extraction_code_pattern.findall(content)
-
-    if extraction_code:
-        return extraction_code[0]
-    else:
-        return generate_random_extraction_code()
-
-def generate_random_extraction_code():
-    code = ''.join(random.sample((string.digits + string.ascii_lowercase), 4))
-    return code
-
-def main():
-    keyword = input("请输入搜索关键词：")
-    results = search_baidu_pan_links(keyword)
-
-    for result in results:
-        extraction_code = find_extraction_code(result['url'])
-        print(f"{result['title']}: {result['url']} 提取码: {extraction_code}")
-
-if __name__ == "__main__":
-    main()
+        $("#search").click(function() {
+            const keyword = $("#keyword").val();
+            search_baidu_pan_links(keyword);
+        });
+    </script>
+</body>
+</html>
