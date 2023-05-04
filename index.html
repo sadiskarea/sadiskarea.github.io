@@ -17,7 +17,7 @@
         const SEARCH_ENGINE_ID = 'c0c4066f3c4e74b3e'; // 替换为您的搜索引擎ID
 
         function search_baidu_pan_links(keyword) {
-            const search_url = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${SEARCH_ENGINE_ID}&q=${keyword}`;
+            const search_url = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${SEARCH_ENGINE_ID}&q=${encodeURIComponent(keyword)}+site:pan.baidu.com/s/`;
             $.getJSON(search_url, function(data) {
                 const items = data.items || [];
                 const results = items
@@ -35,4 +35,3 @@
     </script>
 </body>
 </html>
-
