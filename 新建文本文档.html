@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百度网盘搜索</title>
+    <script async src="https://cse.google.com/cse.js?cx=c0c4066f3c4e74b3e"></script>
+    <script>
+        function executeSearch(query) {
+            google.search.cse.element.getElement('searchBox').execute(query);
+        }
+    </script>
+</head>
+<body>
+    <h1>百度网盘搜索</h1>
+    <form id="searchForm" onsubmit="event.preventDefault(); search();">
+        <label for="keyword">关键词：</label>
+        <input type="text" id="keyword" required>
+        <br><br>
+        <label for="exact">精确搜索：</label>
+        <input type="checkbox" id="exact">
+        <br><br>
+        <button type="submit">搜索</button>
+    </form>
+    <div class="gcse-searchbox" data-resultsUrl="search-results.html"></div>
+    <script>
+        function search() {
+            const keywordInput = document.getElementById('keyword');
+            const exactInput = document.getElementById('exact');
+            const keyword = keywordInput.value;
+            const exact = exactInput.checked;
+
+            if (exact) {
+                executeSearch(`"pan.baidu.com/s/" "${keyword}"`);
+            } else {
+                executeSearch(`pan.baidu.com/s/ *${keyword}*`);
+            }
+        }
+    </script>
+</body>
+</html>
