@@ -59,6 +59,10 @@
       margin: 0;
       color: #777;
     }
+    audio {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -83,4 +87,15 @@
     });
 
     async function searchSongs(query) {
-      const response = await fetch(`https://api.deezer.com/search?q=${query
+      const response = await fetch(`http://localhost:3000/search?keywords=${query}`);
+      const data = await response.json();
+      displaySongs(data.result.songs);
+    }
+
+    function displaySongs(songs) {
+      songContainer.innerHTML = '';
+      songs.forEach(song => {
+        const songCard = document.createElement('div');
+        songCard.className = 'song-card';
+        songCard.innerHTML = `
+
